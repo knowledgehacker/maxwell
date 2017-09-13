@@ -84,7 +84,11 @@ class KafkaCallback implements Callback {
 		}
 
 		cc.markCompleted();
-		timer.update(cc.timeSinceSendMS(), TimeUnit.MILLISECONDS);
+		Long timeSinceSendMS = cc.timeSinceSendMS();
+		if (timer == null) {
+			throw new RuntimeException("Null timer!!");
+		}
+		timer.update(timeSinceSendMS, TimeUnit.MILLISECONDS);
 	}
 }
 
@@ -206,6 +210,9 @@ class MaxwellKafkaProducerWorker extends AbstractAsyncProducer implements Runnab
 		/* if debug logging isn't enabled, release the reference to `value`, which can ease memory pressure somewhat */
 		String value = KafkaCallback.LOGGER.isDebugEnabled() ? record.value() : null;
 
+		if (this.metricsTimer == null) {
+			LOGGER.info("null metricsTimer");
+		}
 		KafkaCallback callback = new KafkaCallback(cc, r.getPosition(), record.key(), value, this.metricsTimer,
 				this.succeededMessageCount, this.failedMessageCount, this.succeededMessageMeter, this.failedMessageMeter, this.context);
 

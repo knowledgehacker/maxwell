@@ -24,9 +24,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Properties;
 import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
-
 
 class KafkaCallback implements Callback {
 	public static final Logger LOGGER = LoggerFactory.getLogger(MaxwellKafkaProducer.class);
@@ -84,10 +82,8 @@ class KafkaCallback implements Callback {
 		}
 
 		cc.markCompleted();
-		timer.update(cc.timeSinceSendMS(), TimeUnit.MILLISECONDS);
 	}
 }
-
 
 public class MaxwellKafkaProducer extends AbstractProducer {
 	private final ArrayBlockingQueue<RowMap> queue;
